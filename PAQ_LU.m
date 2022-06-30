@@ -8,13 +8,13 @@ function [L, U, P,Q] = PAQ_LU(A)
     
     
     for i=1:column - 1
-        [v , k] = max(abs(U(i:column,i:row)));   % v&k are  row vector
-        [~ ,pos] = max(abs(v));                     % ~ is unused  in remaining part of code, so we used this symbol
-        j_max = k(pos)+i-1;                       % row position of Max element
-        c_max = pos+i-1;                          % coloumn position of Max element
+        [v , k] = max(abs(U(i:column,i:row)));   % Here, we find the maximum element for pivoting
+        [~ ,pos] = max(abs(v));                     
+        j_max = k(pos)+i-1;                       %gives row number of that max element
+        c_max = pos+i-1;                          % gives coloumn number of that max element
         
-        if j_max ~= i || c_max ~= i
-            if(c_max ~= i)
+        if j_max ~= i || c_max ~= i                 % We will do pivoting only if the row and coloumn
+            if(c_max ~= i)                          %position of max element  not matches with  pivoting diagonal element
             U(:,[i,c_max]) = U(:,[c_max,i]);
             Q(:,[i,c_max]) = Q(:,[c_max,i]);
             end
@@ -28,9 +28,7 @@ function [L, U, P,Q] = PAQ_LU(A)
         for j=i+1 : row
             L(j,i) = U(j,i)/U(i,i);
             U(j,:) = U(j,:) - L(j,i)*U(i,:);
-            if U(j,:)== 0
-                U(j,:) = 0;
-            end
+            
         end
     end
 end
